@@ -8,6 +8,7 @@ routes = Blueprint('routes', __name__)
 
 # Router to get geo data via ip
 @routes.route("/getgeo", methods=["GET"])
+@routes.route("/getgeo/", methods=["GET"])
 @routes.route("/getgeo/<string:ips>", methods=["GET"])
 def getgeo(ips=None):
 

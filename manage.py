@@ -5,10 +5,7 @@ from app import create_app
 from flask.ext.script import Manager
 from flask.ext import restful
 
-
-
 app = create_app('development')
-
 
 manager = Manager(app)
 
