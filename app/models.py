@@ -6,16 +6,16 @@ class Lookup(object):
         self._ip = ip
         self._data = {
             self._ip: {
-                'city': None,
-                'continent': None,
-                'country': None,
-                'country_code': None,
-                'host': None,
                 'latitude': None,
                 'longitude': None,
-                'postal_code': None,
+                'city': None,
                 'state': None,
+                'country_code': None,
+                'country': None,
+                'postal_code': None,
                 'time_zone': None,
+                'continent': None,
+                'host': None,
             }
         }
 

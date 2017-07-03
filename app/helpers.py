@@ -15,16 +15,16 @@ def lookup(ip):
             lookup.data = {'error': 'Couldn\'t find address in database'}
         else: # If found, then will do
             lookup.data = {
-                'city': db_data.city.name,
-                'continent': db_data.continent.name,
-                'country': db_data.country.name,
-                'country_code': db_data.country.iso_code,
-                'host': hostname(ip)[0],
                 'latitude': db_data.location.latitude,
                 'longitude': db_data.location.longitude,
-                'postal_code': db_data.postal.code,
+                'city': db_data.city.name,
                 'state': db_data.subdivisions.most_specific.iso_code,
+                'country_code': db_data.country.iso_code,
+                'country': db_data.country.name,
+                'postal_code': db_data.postal.code,
                 'time_zone': db_data.location.time_zone,
+                'continent': db_data.continent.name,
+                'host': hostname(ip)[0]
             }
     else:
         lookup.data = {'error': 'I don\'t think this is a valid address'}        
