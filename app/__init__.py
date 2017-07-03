@@ -4,7 +4,10 @@ from flask import Flask
 from config import config
 import geoip2.database
 import gzip, os
+import logging, logging.config
 
+
+# The DB reader must be initalized before loaded in create_app function
 DB_PATH_DEFAULT = '/tmp/GeoLite2-City.mmdb'
 if not os.path.exists(DB_PATH_DEFAULT):
     mmdb_url = 'http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz'
@@ -24,9 +27,18 @@ def create_app(config_name):
         stderr.write('Could not find MaxMind database\n')
         exit(1)
 
+    # Logging config
+    logging_conf = app.config.get("LOGGING_CONF")
+    if logging_conf and os.path.exists(logging_conf):
+        logging.config.fileConfig(logging_conf)
+    logger_name = app.config.get("LOGGER_NAME")
+    if logger_name:
+        logging.root.name = logger_name
 
     from .routes import routes as routes_blueprint
     app.register_blueprint(routes_blueprint)
 
+    logging.debug("App created in mode: %s", config_name)
+    
     return app
 

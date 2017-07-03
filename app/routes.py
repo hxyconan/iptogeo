@@ -2,7 +2,7 @@ from .helpers import lookup
 from flask import request
 from flask import Blueprint, current_app
 import json
-
+import logging
 
 routes = Blueprint('routes', __name__)
 
@@ -21,11 +21,15 @@ def getgeo(ips=None):
     else:
         ips = [request.environ['REMOTE_ADDR']]
 
+    logging.debug("Request to check geo for IP: %s", ', '.join(ips))
+
     response = {}
     for ip in ips:
         response.update(lookup(ip))
+    response_in_json = json.dumps(response)
+    logging.debug("Response json string: %s", response_in_json)
 
-    return json.dumps(response)
+    return response_in_json
 
 
 # Router for testing
@@ -35,5 +39,7 @@ def ping():
     """
     testing message
     """
+    logging.debug("Ping test.")
+
     return 'OK'
 

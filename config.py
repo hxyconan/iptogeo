@@ -11,6 +11,9 @@ class Config(object):
     DEBUG = True
     IPL_PATH_TO_GEOIP_DB = '/tmp/GeoLite2-City.mmdb'
     MAX_REQUEST_LENGTH = 1000
+    # Logging config
+    LOGGING_CONF = "logging.cfg"
+    LOGGER_NAME = "iptogeo"
 
     @staticmethod
     def init_app(app):
