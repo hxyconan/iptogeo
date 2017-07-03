@@ -1,6 +1,6 @@
 import re
 import models
-
+from app import db
 
 def lookup(ip):
     """ Look up a single IP address in the MaxMind database
@@ -32,31 +32,14 @@ def lookup(ip):
     return lookup.data
 
 
-def lookupv2(ip):
-    """ Look up a single IP address in the MaxMind database
+def hostname(ip):
+    """ Attempts a reverse lookup of the hostname.
+        There does exist a GeoIP2 domain database but it's not free.
     """
-    lookup = models.Lookup(ip=ip)
-
-    # Validate the IP address
-    if valid_ip(ip):
-        db_data = db.city(ip) #Execute the ip to geo actual function
-        lookup.data = {
-            'city': db_data.city.name,
-            'continent': db_data.continent.name,
-            'country': db_data.country.name,
-            'country_code': db_data.country.iso_code,
-            'host': hostname(ip)[0],
-            'latitude': db_data.location.latitude,
-            'longitude': db_data.location.longitude,
-            'postal_code': db_data.postal.code,
-            'state': db_data.subdivisions.most_specific.iso_code,
-            'time_zone': db_data.location.time_zone,
-        }
-    else:
-        lookup.data = {'error': 'I don\'t think this is a valid address'}        
-
-    return lookup.data
-
+    try:
+        return socket.gethostbyaddr(ip)
+    except Exception:
+        return None, None, None
 
 
 def valid_ip(ip):

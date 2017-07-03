@@ -1,4 +1,4 @@
-from .helpers import lookup, lookupv2
+from .helpers import lookup
 from flask import request
 from flask import Blueprint, current_app
 import json
@@ -21,7 +21,7 @@ def getgeo(ips):
 
     response = {}
     for ip in ips:
-        response.update(lookupv2(ip))
+        response.update(lookup(ip))
 
     return json.dumps(response)
 
@@ -29,7 +29,7 @@ def getgeo(ips):
 # Router for testing
 @routes.route('/', methods=['GET', 'POST'])
 @routes.route('/ping', methods=['GET', 'POST'])
-def homepage():
+def ping():
     """
     testing message
     """
