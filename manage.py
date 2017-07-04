@@ -3,7 +3,6 @@ import os
 from sys import stderr, exit
 from app import create_app
 from flask.ext.script import Manager
-from flask.ext import restful
 
 app = create_app('development')
 
