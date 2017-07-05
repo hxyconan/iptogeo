@@ -22,9 +22,9 @@ def getgeo(ips=None):
         #ips = [request.environ['REMOTE_ADDR']]
         # Since it after proxy, should use more sophisticated way to get remote ip
         if request.headers.getlist("X-Forwarded-For"):
-                ips = [request.headers.getlist("X-Forwarded-For")[0]]
+            ips = [request.headers.getlist("X-Forwarded-For")[0].split(',')[0]]
         else:
-                ips = [request.remote_addr]
+            ips = [request.remote_addr]
 
     logging.debug("Request to check geo for IP: %s", ', '.join(ips))
 
