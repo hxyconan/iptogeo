@@ -22,10 +22,7 @@ def getgeo(ips=None):
         # Since it after proxy, should use more sophisticated way to get remote ip
         if request.headers.getlist("X-Forwarded-For"):
             x_forwarded_for_header = request.headers.getlist("X-Forwarded-For")
-            if ',' not in x_forwarded_for_header:
-                ips = [x_forwarded_for_header[0]]
-            else:
-                ips = [x_forwarded_for_header[0].split(',')[0]] #Get first element in X-Forwarded-For header
+            ips = [x_forwarded_for_header[0].split(',')[0]] #Always get first element in X-Forwarded-For header
         else:
             ips = [request.remote_addr]
 
