@@ -41,6 +41,10 @@ sudo uwsgi --ini uwsgi.ini
 sudo service iptogeo start|stop|restart
 ```
 
+## TODO
+- The MaxMind DB should automatically check update and download
+- How to move this API to AWS Lambda service for more elastic and cheaper
+
 ## About ip-to-location repo
 - It generates the geo imformation by lookup your IP in MaxMind geo database
 - It uses gunicorn to start the application
