@@ -28,10 +28,15 @@ def getgeo(ips=None):
 
     logging.debug("Request to check geo for IP: %s", ', '.join(ips))
 
-    response = {}
-    for ip in ips:
-        response.update(lookup(ip))
-    response_in_json = json.dumps(response)
+    response_in_json = ''
+    if len(ips) == 1:
+        response_in_json = json.dumps(lookup(ips[0]))
+    else:
+        results_list = []
+        for ip in ips:
+            results_list.append(lookup(ip))
+        response_in_json = json.dumps(results_list)
+
     logging.debug("Response json string: %s", response_in_json)
 
     return response_in_json

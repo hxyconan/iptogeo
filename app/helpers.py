@@ -12,9 +12,13 @@ def lookup(ip):
         try:
             db_data = db.city(ip) #Execute the ip to geo actual function
         except Exception, e:
-            lookup.data = {'error': 'Couldn\'t find address in database'}
+            lookup.data = {
+                'ip': ip,
+                'error': 'Couldn\'t find address in database'
+            }
         else: # If found, then will do
             lookup.data = {
+                'ip': ip,
                 'latitude': db_data.location.latitude,
                 'longitude': db_data.location.longitude,
                 'city': db_data.city.name,
@@ -27,9 +31,13 @@ def lookup(ip):
                 'host': hostname(ip)[0]
             }
     else:
-        lookup.data = {'error': 'I don\'t think this is a valid address'}        
+        lookup.data = {
+            'ip': ip,
+            'error': 'I don\'t think this is a valid address'
+        }
 
-    return lookup.data
+    # Return the dictionary value without key name
+    return lookup.data[ip]
 
 
 def hostname(ip):
