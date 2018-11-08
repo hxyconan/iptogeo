@@ -1,0 +1,25 @@
+#/etc/uwsgi-emperor/vassals/iptogeo.ini
+[uwsgi]
+chdir = [{{ iptogeo_root_path }}]
+http-socket = :{{ backend_port }}
+master = true
+processes = 4
+die-on-term = true
+module = manage:app
+memory-report = true
+debug = true
+pythonpath = "app"
+log-master = true
+plugins = python,logfile
+logger = file:/var/log/iptogeo.log
+
+# Prepare Maximind db file
+if-file = /tmp/GeoLite2-City.mmdb
+print = OK: Maxmind db file existed
+endif =
+
+if-not-file = /tmp/GeoLite2-City.mmdb
+print = INFO: Maxmind db file not exist, new download in processing...
+exec-pre-app = wget http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz -O /tmp/GeoLite2-City.mmdb.gz
+exec-pre-app = gunzip /tmp/GeoLite2-City.mmdb.gz
+endif =

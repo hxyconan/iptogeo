@@ -2,53 +2,38 @@
 
 An API interface forked from [afreeorange/ip-to-location](https://github.com/afreeorange/ip-to-location) to get geo information via given IP or reading from request header.
 
-## New features
-- The API service run as an uwsgi backend application
-- It support Reverse Proxy situation, which the uwsgi service will use X-FORWARDED-FOR request header after proxy
-- It will download latest MaxMind DB when started
-- Response data in json string, example in screenshots
-
-![UI](https://raw.githubusercontent.com/hxyconan/iptogeo/master/screenshots/screenshot_single_ip.png)
-
-![UI](https://raw.githubusercontent.com/hxyconan/iptogeo/master/screenshots/screenshot_multi_ips.png)
-
-
 ## How to use
 - Hit http://example.com/getgeo to get your geo information
 - Hit http://example.com/getgeo/[ONE-OR-MANY-IPV4-ADDRESS] to get the geo information of that IP
 - Check health: http://example.com/ping
 - Log file: /var/log/iptogeo.log
 
+## Features
+- The API service run as an uwsgi backend application
+- It support Reverse Proxy situation, which the uwsgi service will use X-FORWARDED-FOR request header after proxy
+- It will download latest MaxMind DB when service started/restart
+- Response data in json string, example in screenshots
 
-## Start the application
-- Start via python command line for development
- 
+![UI](https://raw.githubusercontent.com/hxyconan/iptogeo/master/screenshots/screenshot_single_ip.png)
+
+![UI](https://raw.githubusercontent.com/hxyconan/iptogeo/master/screenshots/screenshot_multi_ips.png)
+
+## Running emperor.uwsgi.service vassal
+- Copy the `iptogeo_emperor_vassal_uwsgi.ini.default` to `/etc/uwsgi-emperor/vassals/iptogeo.ini` then this API will be managed by emperor.uwsgi.service
+- Boot the uWSGI API application
 ```
-sudo python manage.py runserver --host 0.0.0.0 --port 8002
+systemctl start|restart|stop|status emperor.uwsgi.service
 ```
-The port number could be any customized available port number, our default one 8002.
+- The `/etc/uwsgi-emperor/vassals/iptogeo.ini` includes a UWSGI hardcode hook: `exec-pre-app` which will downlad the maxmind db before app load
+- uWSGI service runs at special port in backend, Nginx need to be installed for proxy the request to such special backend port
+- Copy `iptogeo_nginx.conf.default` to `/etc/ngix/sites-enabled/iptogeo.conf` for setup nginx to listen all requests from port 80
 
-
-- Start via uwsgi as production
-
-```
-sudo uwsgi --ini uwsgi.ini 
-```
-
-
-## Installation as Upstart Service
-- You can create a update service in Ubuntu as this [hxyconan/ansible-role-upstart-service](https://github.com/hxyconan/ansible-role-upstart-service)
-- Then start\stop\restart the application as:
-
-```
-sudo service iptogeo start|stop|restart
-```
 
 ## TODO
-- The MaxMind DB should automatically check update and download
 - How to move this API to AWS Lambda service for more elastic and cheaper
 
-## About ip-to-location repo
+
+## About the forked ip-to-location repo
 - It generates the geo imformation by lookup your IP in MaxMind geo database
 - It uses gunicorn to start the application
 - More information check: [https://github.com/afreeorange/ip-to-location](https://github.com/afreeorange/ip-to-location)
